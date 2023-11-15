@@ -1,0 +1,57 @@
+---
+title: "IST687-FinalProject"
+author: "Group 2"
+date: "2023-11-15"
+output: pdf_document
+---
+
+```{r}
+library(arrow)
+library(tidyverse)
+```
+
+
+```{r}
+static_house_info <- read_parquet("https://intro-datascience.s3.us-east-2.amazonaws.com/SC-data/static_house_info.parquet")
+```
+
+```{r}
+bldg_id <- static_house_info$bldg_id
+```
+
+```{r}
+county <- unique(static_house_info$in.county)
+```
+
+```{r}
+bldg_links <- vector()
+for(i in bldg_id){
+  link <- 'https://intro-datascience.s3.us-east-2.amazonaws.com/SC-data/2023-houseData/'
+  bldg_link <- paste(link,i,'.parquet', sep='')
+  bldg_links <-c(bldg_links,bldg_link)
+}
+```
+
+```{r}
+temp <- read_parquet(bldg_links[1])
+colname <- colnames(temp)
+data <- data.frame(matrix(ncol=length(colname), nrow=0))
+names(data) <- colname
+```
+
+
+
+```{r}
+count=1 
+for(link in bldg_links){
+  tempDf <- read_parquet(link)
+  tempDf$bldg_id <- bldg_id[count]
+  count <- count + 1
+  data <- rbind(data,tempDf)
+}
+```
+
+
+
+
+
