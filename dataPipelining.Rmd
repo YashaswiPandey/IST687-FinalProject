@@ -37,21 +37,55 @@ temp <- read_parquet(bldg_links[1])
 colname <- colnames(temp)
 data <- data.frame(matrix(ncol=length(colname), nrow=0))
 names(data) <- colname
+name <- colnames(data[, -which(names(data) == "time")])
 ```
-
-
 
 ```{r}
 count=1 
 for(link in bldg_links){
   tempDf <- read_parquet(link)
+  tempDf <- tempDf[month(tempDf$time)==7,]
   tempDf$bldg_id <- bldg_id[count]
   count <- count + 1
   data <- rbind(data,tempDf)
 }
 ```
 
+```{r}
+data$total <- rowSums(data[ , name])
 
 
+name <- name[!name %in% c("bldg_id")]
+write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\energyData.csv")
+```
 
+```{r}
+county_links <- vector()
+for(i in county){
+  link <- 'https://intro-datascience.s3.us-east-2.amazonaws.com/SC-data/weather/2023-weather-data/'
+  county_link <- paste(link,i,'.csv', sep='')
+  county_links <-c(county_links,county_link)
+}
+```
+
+```{r}
+temp <- read_csv(county_links[1])
+colname <- colnames(temp)
+data <- data.frame(matrix(ncol=length(colname), nrow=0))
+names(data) <- colname
+```
+
+```{r}
+count=1 
+for(link in county_links){
+  tempDf <- read_csv(link)
+  tempDf$county_id <- county[count]
+  count <- count + 1
+  data <- rbind(data,tempDf)
+}
+```
+
+```{r}
+write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherData.csv")
+```
 
