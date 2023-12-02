@@ -3,4 +3,10 @@
 .RData
 .Ruserdata
 Project Description-687.pdf
-data
+data_dictionary.csv
+energyData (1).csv
+energyData.csv
+static_house_info.parquet
+static_house_info1.csv
+weatherData.csv
+weatherES.csv

@@ -1,0 +1,61 @@
+---
+title: "dataPrep"
+author: "Yashaswi"
+date: "2023-12-02"
+output: pdf_document
+---
+
+```{r}
+energyData <- read_csv("energyData (1).csv")
+energyData <- na.omit(energyData)
+```
+
+```{r}
+staticHI <- read_csv("static_house_info1.csv")
+```
+
+```{r}
+weatherData <- read_csv("weatherData.csv")
+```
+```{r}
+col <- c("bldg_id", "in.county")
+colname <- colnames(staticHI)
+```
+
+
+```{r}
+staticHI <- staticHI[ ,colname %in% col]
+```
+
+```{r}
+energyStatic <- merge(energyData,staticHI,by="bldg_id")
+```
+
+```{r}
+col <- c("bldg_id", "in.county","total","time")
+colname <- colnames(energyStatic)
+```
+
+
+```{r}
+energyStatic <- energyStatic[ ,colname %in% col]
+```
+
+
+```{r}
+aggEnergy <- aggregate(total ~ in.county + time, data = energyStatic, FUN = sum, na.rm = TRUE)
+```
+
+
+```{r}
+weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("county_id","date_time"), all.x = TRUE)
+```
+
+```{r}
+weatherES <- weatherES[,!in.county.y]
+```
+
+```{r}
+write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
+```
+
