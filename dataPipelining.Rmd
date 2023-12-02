@@ -80,9 +80,13 @@ count=1
 for(link in county_links){
   tempDf <- read_csv(link)
   tempDf$county_id <- county[count]
+  tempDf$date_time <- with_tz(tempDf$date_time, tzone = "EST5EDT")
   count <- count + 1
   data <- rbind(data,tempDf)
 }
+```
+```{r}
+data <- data[month(data$date_time)==7,]
 ```
 
 ```{r}
