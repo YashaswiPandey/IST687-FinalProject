@@ -1,0 +1,92 @@
+---
+title: "dataModeling"
+author: "Group-2"
+date: "2023-12-06"
+output: pdf_document
+---
+```{r}
+library(tidyverse)
+library(caret)
+library(kernlab)
+```
+
+```{r}
+weatherES <- read_csv("weatherES.csv")
+weatherES$time <- with_tz(weatherES$time, tzone = "EST5EDT")
+
+weatherESTest <- read_csv("weatherESTest.csv")
+weatherESTest$time <- with_tz(weatherESTest$time, tzone = "EST5EDT")
+```
+
+```{r}
+lmOut <- lm(total ~., weatherES)
+```
+
+```{r}
+summary(lmOut)
+```
+
+
+```{r}
+colnames(weatherES)
+```
+
+
+
+```{r}
+weatherDay <- weatherES %>% group_by(in.county, day(time)) %>%
+  summarise(total = sum(total),
+            temperature = mean(`Dry Bulb Temperature [°C]`),
+            humidity = mean(`Relative Humidity [%]`),
+            windSpeed = mean(`Wind Speed [m/s]`),
+            windDirection = mean(`Wind Direction [Deg]`),
+            ghRadiation = mean(`Global Horizontal Radiation [W/m2]`),
+            dnRadiation = mean(`Direct Normal Radiation [W/m2]`),
+            dhRadiation = mean(`Diffuse Horizontal Radiation [W/m2]`),
+            .groups = 'drop')
+```
+
+```{r}
+weatherWeek <- weatherES %>% group_by(in.county,day= wday(time, week_start = getOption("lubridate.week.start", 7))) %>%
+  summarise(total = sum(total),
+            temperature = mean(`Dry Bulb Temperature [°C]`),
+            humidity = mean(`Relative Humidity [%]`),
+            windSpeed = mean(`Wind Speed [m/s]`),
+            windDirection = mean(`Wind Direction [Deg]`),
+            ghRadiation = mean(`Global Horizontal Radiation [W/m2]`),
+            dnRadiation = mean(`Direct Normal Radiation [W/m2]`),
+            dhRadiation = mean(`Diffuse Horizontal Radiation [W/m2]`),
+            .groups = 'drop')
+```
+
+```{r}
+lmOut1 <- lm(total ~., weatherDay)
+lmOut2 <- lm(total ~., weatherWeek)
+```
+
+```{r}
+summary(lmOut1)
+```
+
+
+```{r}
+summary(lmOut2)
+```
+```{r}
+svm_model <- ksvm(total ~ ., data = weatherES, C = 5 , cross = 3, prob.model = TRUE)
+svm_model
+```
+
+```{r}
+svm_model1 <- train(total ~ ., data = weatherES, method = "svmRadial")
+```
+
+```{r}
+pred <- predict(lmOut, weatherESTest)
+```
+
+```{r}
+weatherESTest$totalPredicted <- pred
+```
+
+

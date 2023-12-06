@@ -6,6 +6,11 @@ output: pdf_document
 ---
 
 ```{r}
+library(tidyverse)
+```
+
+
+```{r}
 energyData <- read_csv("energyData (1).csv")
 energyData <- na.omit(energyData)
 ```
@@ -52,10 +57,23 @@ weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("c
 ```
 
 ```{r}
-weatherES <- weatherES[,!in.county.y]
+write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
 ```
 
 ```{r}
-write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
+weatherESTest <-weatherES[,!colnames(weatherES) %in% c("total")]
 ```
+
+```{r}
+incTemp <- weatherESTest$`Dry Bulb Temperature [°C]`+5
+```
+
+```{r}
+weatherESTest$`Dry Bulb Temperature [°C]` <- incTemp
+```
+
+```{r}
+write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
+```
+
 
