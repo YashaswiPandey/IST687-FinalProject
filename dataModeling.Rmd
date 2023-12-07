@@ -5,12 +5,14 @@ date: "2023-12-06"
 output: pdf_document
 ---
 ```{r}
+#Using tidyverse, caret and kernlab
 library(tidyverse)
 library(caret)
 library(kernlab)
 ```
 
 ```{r}
+#Reading train and test data in proper time zone
 weatherES <- read_csv("weatherES.csv")
 weatherES$time <- with_tz(weatherES$time, tzone = "EST5EDT")
 
@@ -18,21 +20,25 @@ weatherESTest <- read_csv("weatherESTest.csv")
 weatherESTest$time <- with_tz(weatherESTest$time, tzone = "EST5EDT")
 ```
 ```{r}
+#Building linear model on train data using total as dependent variable and all the other columns as independent columns
 lmOut <- lm(total ~., weatherES)
 ```
 
 ```{r}
+#Displaying the summary of the model
 summary(lmOut)
 ```
 
 
 ```{r}
+#Displaying the column names of the data
 colnames(weatherES)
 ```
 
 
 
 ```{r}
+#Aggregating data on county and day
 weatherDay <- weatherES %>% group_by(in.county, day(time)) %>%
   summarise(total = sum(total),
             temperature = mean(`Dry Bulb Temperature [°C]`),
@@ -46,6 +52,7 @@ weatherDay <- weatherES %>% group_by(in.county, day(time)) %>%
 ```
 
 ```{r}
+#Aggregating data on county and week
 weatherWeek <- weatherES %>% group_by(in.county,day= wday(time, week_start = getOption("lubridate.week.start", 7))) %>%
   summarise(total = sum(total),
             temperature = mean(`Dry Bulb Temperature [°C]`),
@@ -60,25 +67,47 @@ weatherWeek <- weatherES %>% group_by(in.county,day= wday(time, week_start = get
 
 
 ```{r}
+#Building linear models for day and week
 lmOut1 <- lm(total ~., weatherDay)
 lmOut2 <- lm(total ~., weatherWeek)
 ```
 
 ```{r}
+#Displaying the summary of the model
 summary(lmOut1)
 ```
 
 
 ```{r}
+#Displaying the summary of the model
 summary(lmOut2)
+```
+<<<<<<< HEAD
+=======
+```{r}
+#Building the svm model
+svm_model <- ksvm(total ~ ., data = weatherES, C = 5 , cross = 3, prob.model = TRUE)
+svm_model
 ```
 
 ```{r}
+#Training the svm model
+svm_model1 <- train(total ~ ., data = weatherES, method = "svmRadial")
+```
+>>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
+
+```{r}
+#Predicting output for dependent variable
 pred <- predict(lmOut, weatherESTest)
 ```
 
 ```{r}
+<<<<<<< HEAD
 weatherESTest$totalPredicted <- round(pred,2)
+=======
+#Adding the prediction to the data
+weatherESTest$totalPredicted <- pred
+>>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 ```{r}

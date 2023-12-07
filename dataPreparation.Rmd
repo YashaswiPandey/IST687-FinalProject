@@ -6,74 +6,102 @@ output: pdf_document
 ---
 
 ```{r}
+#Using tidyverse package
 library(tidyverse)
 ```
 
 
 ```{r}
+<<<<<<< HEAD
 energyData <- read_csv("energyData.csv")
+=======
+#Reading energy data and removing null values
+energyData <- read_csv("energyData (1).csv")
+>>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 energyData <- na.omit(energyData)
 ```
 
 ```{r}
+#Reading static house info
 staticHI <- read_csv("static_house_info1.csv")
 ```
 
 ```{r}
+#Reading weather data
 weatherData <- read_csv("weatherData.csv")
 ```
 ```{r}
+#Filtering required column names
 col <- c("bldg_id", "in.county")
 colname <- colnames(staticHI)
 ```
 
 
 ```{r}
+#Filtering data using required column names
 staticHI <- staticHI[ ,colname %in% col]
 ```
 
 ```{r}
+#Merge energy data and static house info using building id
 energyStatic <- merge(energyData,staticHI,by="bldg_id")
 ```
 
 ```{r}
+#Taking required columns
 col <- c("bldg_id", "in.county","total","time")
 colname <- colnames(energyStatic)
 ```
 
 
 ```{r}
+#Filtering energy static data using the required columns
 energyStatic <- energyStatic[ ,colname %in% col]
 ```
 
 
 ```{r}
+#Aggregating energy static data by adding the energy consumption on the basis of county and time
 aggEnergy <- aggregate(total ~ in.county + time, data = energyStatic, FUN = sum, na.rm = TRUE)
 ```
 
 
 ```{r}
+#Merge the above data with weather data using county and time
 weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("county_id","date_time"), all.x = TRUE)
 ```
 
 ```{r}
+<<<<<<< HEAD
 #write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
+=======
+#Creating csv file from the merged data
+write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
+>>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 ```{r}
+#Creating test data by exculuding the column total
 weatherESTest <-weatherES[,!colnames(weatherES) %in% c("total")]
 ```
 
 ```{r}
+#Adding 5°C to the temperature to create test data
 incTemp <- weatherESTest$`Dry Bulb Temperature [°C]`+5
 ```
 
 ```{r}
+#Updating the test data
 weatherESTest$`Dry Bulb Temperature [°C]` <- incTemp
 ```
 
 ```{r}
+<<<<<<< HEAD
 #write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
+=======
+#Creating csv file of test data
+write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
+>>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 
