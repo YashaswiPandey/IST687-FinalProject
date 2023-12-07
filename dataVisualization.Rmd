@@ -1,0 +1,35 @@
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+weatherES <- read_csv("weatherES.csv")
+```
+
+```{r}
+boxplot(weatherES$`Relative Humidity [%]`,
+        col = c("blue"),
+        horizontal = TRUE,
+        ylab = "Relative Humidity",
+        border = "brown",
+        xlab = "Relative Humidity %")
+```
+```{r}
+boxplot(weatherES$`Dry Bulb Temperature [°C]`,
+        col = c("red"),
+        horizontal = TRUE,
+        ylab = "Temperature",
+        border = "purple",
+        xlab = "Temperature in celsius")
+```
+
+```{r}
+ggplot(data=weatherES) + aes(x=`Dry Bulb Temperature [°C]`, y=total) + geom_point() +
+geom_smooth(method="lm", se=FALSE)
+```
+
+```{r}
+ggplot(data=weatherES) + aes(x=`Relative Humidity [%]`, y=total) + geom_point() +
+geom_smooth(method="lm", se=FALSE)
+```

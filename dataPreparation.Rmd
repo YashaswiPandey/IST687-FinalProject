@@ -11,7 +11,7 @@ library(tidyverse)
 
 
 ```{r}
-energyData <- read_csv("energyData (1).csv")
+energyData <- read_csv("energyData.csv")
 energyData <- na.omit(energyData)
 ```
 
@@ -57,7 +57,7 @@ weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("c
 ```
 
 ```{r}
-write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
+#write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
 ```
 
 ```{r}
@@ -73,7 +73,27 @@ weatherESTest$`Dry Bulb Temperature [°C]` <- incTemp
 ```
 
 ```{r}
-write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
+#write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
 ```
 
+
+```{r}
+dayWeather <- aggregate(total ~day(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
+```
+
+```{r}
+head(dayWeather)
+```
+
+
+```{r}
+weekWeather <- aggregate(total ~wday(time) + in.county, data=aggEnergy, FUN = sum, na.rm = TRUE)
+```
+
+```{r}
+head(weekWeather)
+```
+```{r}
+
+```
 

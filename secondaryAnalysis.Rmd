@@ -1,0 +1,48 @@
+```{r}
+library(tidyverse)
+library(arrow)
+```
+
+```{r}
+energyData <- read_csv("energyData.csv")
+```
+
+```{r}
+coln <- c("bldg_id","time","total")
+
+energyData <- energyData[,colnames(energyData) %in% coln]
+```
+
+
+```{r}
+staticHouse <- read_parquet("static_house_info.parquet")
+
+coln <- c("bldg_id","in.county","in.insulation_wall")
+staticHouse <- staticHouse[,colnames(staticHouse) %in% coln]
+```
+
+```{r}
+energyStatic <- merge(energyData,staticHouse,by="bldg_id")
+```
+
+
+```{r}
+weatherData <- read_csv("weatherData.csv")
+```
+
+```{r}
+houseWeather <- merge(energyStatic,weatherData, by.x=c("in.county","time"), by.y = c("county_id","date_time"), all.x = TRUE)
+```
+
+```{r}
+insulation <- aggregate(total ~in.insulation_wall + day(time),data= houseWeather, FUN = sum,na.rm= TRUE)
+```
+
+```{r}
+a <- lm(total ~., data = insulation)
+```
+
+```{r}
+summary(a)
+```
+
