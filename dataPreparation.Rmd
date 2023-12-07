@@ -12,12 +12,8 @@ library(tidyverse)
 
 
 ```{r}
-<<<<<<< HEAD
-energyData <- read_csv("energyData.csv")
-=======
 #Reading energy data and removing null values
-energyData <- read_csv("energyData (1).csv")
->>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
+energyData <- read_csv("energyData.csv")
 energyData <- na.omit(energyData)
 ```
 
@@ -72,12 +68,7 @@ weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("c
 ```
 
 ```{r}
-<<<<<<< HEAD
-#write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
-=======
-#Creating csv file from the merged data
 write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
->>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 ```{r}
@@ -96,12 +87,9 @@ weatherESTest$`Dry Bulb Temperature [°C]` <- incTemp
 ```
 
 ```{r}
-<<<<<<< HEAD
-#write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
-=======
+
 #Creating csv file of test data
 write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
->>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 
@@ -120,8 +108,5 @@ weekWeather <- aggregate(total ~wday(time) + in.county, data=aggEnergy, FUN = su
 
 ```{r}
 head(weekWeather)
-```
-```{r}
-
 ```
 

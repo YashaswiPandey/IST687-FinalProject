@@ -82,19 +82,7 @@ summary(lmOut1)
 #Displaying the summary of the model
 summary(lmOut2)
 ```
-<<<<<<< HEAD
-=======
-```{r}
-#Building the svm model
-svm_model <- ksvm(total ~ ., data = weatherES, C = 5 , cross = 3, prob.model = TRUE)
-svm_model
-```
 
-```{r}
-#Training the svm model
-svm_model1 <- train(total ~ ., data = weatherES, method = "svmRadial")
-```
->>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 
 ```{r}
 #Predicting output for dependent variable
@@ -102,12 +90,8 @@ pred <- predict(lmOut, weatherESTest)
 ```
 
 ```{r}
-<<<<<<< HEAD
-weatherESTest$totalPredicted <- round(pred,2)
-=======
 #Adding the prediction to the data
 weatherESTest$totalPredicted <- pred
->>>>>>> 96122b23396cd4b0a88376d4a4693ce5092fd140
 ```
 
 ```{r}
