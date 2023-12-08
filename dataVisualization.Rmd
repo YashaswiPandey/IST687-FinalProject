@@ -1,74 +1,90 @@
 ```{r}
+#Importing tidyverse and ggplot2
 library(tidyverse)
 library(ggplot2)
 ```
 
 ```{r}
+#Reading weather data
 weatherES <- read_csv("weatherES.csv")
 ```
 ```{r}
+#Reading house data
 house <- read_csv("houseWeather.csv")
 ```
 
 
 ```{r}
+#Creating a vector of unique counties
 county <- unique(weatherES$in.county)
 ```
 
 
 ```{r}
+#Adding weather data based on county
 wData <- aggregate(total ~in.county, data= weatherES, FUN = sum, na.rm=TRUE)
 ```
 
 
 ```{r}
+#Reading data from aggregated energy file
 aggEnergy<- read_csv("aggEnergy.csv")
 ```
 
 ```{r}
+#Aggregating the energy data on daily basis for the month of July
 dayWeather <- aggregate(total ~day(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
 ```
 
 ```{r}
+#Ordering the weather data based on the energy total
 dayWeather <- dayWeather[order(dayWeather$total),]
 ```
 
 
 ```{r}
+#Displaying first six entries
 head(dayWeather)
 ```
 
 ```{r}
+#Displaying last six entries
 tail(dayWeather)
 ```
 
 ```{r}
+#Plotting data on daily basis using bar graph
 ggplot(dayWeather, aes(`day(time)`,total)) + geom_col()
 ```
 
 
 ```{r}
+#Aggregating data on week day
 weekWeather <- aggregate(total ~wday(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
 weekWeather <- weekWeather[order(weekWeather$total),]
 ```
 
 
 ```{r}
+#Displaying data for week
 weekWeather
 ```
 
 ```{r}
+#Plotting data on weekday basis
 ggplot(weekWeather, aes(`wday(time)`,total)) + geom_col()
 ```
 
 
 ```{r}
+#Plotting data
 ggplot(wData, aes(total,in.county)) + geom_col(orientation="y")
 ```
 
 
 
 ```{r}
+#Plotting boxplot for relative humidity
 boxplot(weatherES$`Relative Humidity [%]`,
         col = c("blue"),
         horizontal = TRUE,
@@ -78,6 +94,7 @@ boxplot(weatherES$`Relative Humidity [%]`,
 ```
 
 ```{r}
+#Plotting boxplot for dry bulb temperature
 boxplot(weatherES$`Dry Bulb Temperature [°C]`,
         col = c("red"),
         horizontal = TRUE,
@@ -87,6 +104,7 @@ boxplot(weatherES$`Dry Bulb Temperature [°C]`,
 ```
 
 ```{r}
+#Plotting scatter plot for energy vs temperature
 ggplot(data=weatherES) + aes(x=`Dry Bulb Temperature [°C]`, y=total) + geom_point() +
 geom_smooth(method="lm", se=FALSE)
 ```
