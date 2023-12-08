@@ -65,7 +65,7 @@ data$total <- rowSums(data[ , name])
 
 
 name <- name[!name %in% c("bldg_id")]
-write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\energyData.csv")
+#write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\energyData.csv")
 ```
 
 ```{r}
@@ -101,6 +101,6 @@ data <- data[month(data$date_time)==7,]
 ```
 
 ```{r}
-write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherData.csv")
+#write_csv(data, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherData.csv")
 ```
 

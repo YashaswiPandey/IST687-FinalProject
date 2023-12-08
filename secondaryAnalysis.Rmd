@@ -22,7 +22,7 @@ staticHouse <- staticHouse[,colnames(staticHouse) %in% coln]
 ```
 
 ```{r}
-energyStatic <- merge(energyData,staticHouse,by="bldg_id")
+energyStatic <- merge(energyData,staticHouse,by="bldg_id", all.x = TRUE)
 ```
 
 
@@ -35,6 +35,11 @@ houseWeather <- merge(energyStatic,weatherData, by.x=c("in.county","time"), by.y
 ```
 
 ```{r}
+unique(energyStatic$in.insulation_wall)
+```
+
+
+```{r}
 insulation <- aggregate(total ~in.insulation_wall + day(time),data= houseWeather, FUN = sum,na.rm= TRUE)
 ```
 
@@ -44,5 +49,13 @@ a <- lm(total ~., data = insulation)
 
 ```{r}
 summary(a)
+```
+```{r}
+insulation <- aggregate(total ~in.insulation_wall,data= houseWeather, FUN = sum,na.rm= TRUE)
+```
+
+
+```{r}
+plot(insulation$in.insulation_wall,insulation$total)
 ```
 

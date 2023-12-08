@@ -6,6 +6,64 @@ library(ggplot2)
 ```{r}
 weatherES <- read_csv("weatherES.csv")
 ```
+```{r}
+house <- read_csv("houseWeather.csv")
+```
+
+
+```{r}
+county <- unique(weatherES$in.county)
+```
+
+
+```{r}
+wData <- aggregate(total ~in.county, data= weatherES, FUN = sum, na.rm=TRUE)
+```
+
+
+```{r}
+aggEnergy<- read_csv("aggEnergy.csv")
+```
+
+```{r}
+dayWeather <- aggregate(total ~day(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
+```
+
+```{r}
+head(dayWeather)
+```
+
+
+```{r}
+weekDWeather <- aggregate(total ~wday(time) + in.county, data=aggEnergy, FUN = sum, na.rm = TRUE)
+```
+
+```{r}
+head(weekDWeather)
+```
+
+```{r}
+weekWeather <- aggregate(total ~wday(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
+```
+
+
+```{r}
+head(weekWeather)
+```
+
+```{r}
+ggplot(weekWeather, aes(`wday(time)`,total)) + geom_col()
+```
+
+```{r}
+ggplot(dayWeather, aes(`day(time)`,total)) + geom_col()
+```
+
+```{r}
+ggplot(wData, aes(total,in.county)) + geom_col(orientation="y")
+```
+
+
 
 ```{r}
 boxplot(weatherES$`Relative Humidity [%]`,
@@ -15,6 +73,7 @@ boxplot(weatherES$`Relative Humidity [%]`,
         border = "brown",
         xlab = "Relative Humidity %")
 ```
+
 ```{r}
 boxplot(weatherES$`Dry Bulb Temperature [°C]`,
         col = c("red"),

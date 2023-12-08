@@ -21,3 +21,10 @@ weatherESTest.csv
 weatherESTestPred.csv
 static_house_info_TJ.csv
 static_house_infoChrish.csv
+dataAnalysis.Rmd
+aggEnergy.csv
+dayWeather.csv
+houseWeather.csv
+weatherESTest.csv
+weekDWeather.csv
+weekWeather.csv

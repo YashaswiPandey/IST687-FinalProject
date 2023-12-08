@@ -14,8 +14,11 @@ library(tidyverse)
 ```{r}
 #Reading energy data and removing null values
 energyData <- read_csv("energyData.csv")
+energyData$time <- with_tz(energyData$time, tzone = "EST5EDT")
 energyData <- na.omit(energyData)
 ```
+
+
 
 ```{r}
 #Reading static house info
@@ -26,6 +29,8 @@ staticHI <- read_csv("static_house_info1.csv")
 #Reading weather data
 weatherData <- read_csv("weatherData.csv")
 ```
+
+
 ```{r}
 #Filtering required column names
 col <- c("bldg_id", "in.county")
@@ -61,11 +66,19 @@ energyStatic <- energyStatic[ ,colname %in% col]
 aggEnergy <- aggregate(total ~ in.county + time, data = energyStatic, FUN = sum, na.rm = TRUE)
 ```
 
+```{r}
+write_csv(aggEnergy, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\aggEnergy.csv")
+```
 
 ```{r}
 #Merge the above data with weather data using county and time
 weatherES <- merge(aggEnergy,weatherData,by.x=c("in.county","time"), by.y = c("county_id","date_time"), all.x = TRUE)
 ```
+
+```{r}
+unique(weatherES$in.county)
+```
+
 
 ```{r}
 write_csv(weatherES, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherES.csv")
@@ -91,22 +104,3 @@ weatherESTest$`Dry Bulb Temperature [°C]` <- incTemp
 #Creating csv file of test data
 write_csv(weatherESTest, "D:\\SyracuseUniversity\\Semester1\\IST_687-IntroToDataScience\\IST687-FinalProject\\weatherESTest.csv")
 ```
-
-
-```{r}
-dayWeather <- aggregate(total ~day(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
-```
-
-```{r}
-head(dayWeather)
-```
-
-
-```{r}
-weekWeather <- aggregate(total ~wday(time) + in.county, data=aggEnergy, FUN = sum, na.rm = TRUE)
-```
-
-```{r}
-head(weekWeather)
-```
-
