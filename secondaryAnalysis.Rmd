@@ -1,6 +1,7 @@
 ```{r}
 library(tidyverse)
 library(arrow)
+library(ggplot2)
 ```
 
 ```{r}
@@ -40,22 +41,17 @@ unique(energyStatic$in.insulation_wall)
 
 
 ```{r}
-insulation <- aggregate(total ~in.insulation_wall + day(time),data= houseWeather, FUN = sum,na.rm= TRUE)
+insulationWall <- aggregate(total ~in.insulation_wall + day(time),data= houseWeather, FUN = sum,na.rm= TRUE)
 ```
 
 ```{r}
-a <- lm(total ~., data = insulation)
-```
-
-```{r}
-summary(a)
-```
-```{r}
-insulation <- aggregate(total ~in.insulation_wall,data= houseWeather, FUN = sum,na.rm= TRUE)
+insulationWTot <- aggregate(total ~in.insulation_wall,data= houseWeather, FUN = mean,na.rm= TRUE)
 ```
 
 
 ```{r}
-plot(insulation$in.insulation_wall,insulation$total)
+ggplot(insulationWTot, aes(total,in.insulation_wall)) + geom_col()
 ```
+
+
 

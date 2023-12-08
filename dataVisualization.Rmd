@@ -30,34 +30,37 @@ dayWeather <- aggregate(total ~day(time), data=aggEnergy, FUN = sum, na.rm = TRU
 ```
 
 ```{r}
+dayWeather <- dayWeather[order(dayWeather$total),]
+```
+
+
+```{r}
 head(dayWeather)
 ```
 
-
 ```{r}
-weekDWeather <- aggregate(total ~wday(time) + in.county, data=aggEnergy, FUN = sum, na.rm = TRUE)
+tail(dayWeather)
 ```
 
 ```{r}
-head(weekDWeather)
+ggplot(dayWeather, aes(`day(time)`,total)) + geom_col()
 ```
+
 
 ```{r}
 weekWeather <- aggregate(total ~wday(time), data=aggEnergy, FUN = sum, na.rm = TRUE)
+weekWeather <- weekWeather[order(weekWeather$total),]
 ```
 
 
 ```{r}
-head(weekWeather)
+weekWeather
 ```
 
 ```{r}
 ggplot(weekWeather, aes(`wday(time)`,total)) + geom_col()
 ```
 
-```{r}
-ggplot(dayWeather, aes(`day(time)`,total)) + geom_col()
-```
 
 ```{r}
 ggplot(wData, aes(total,in.county)) + geom_col(orientation="y")
@@ -80,15 +83,10 @@ boxplot(weatherES$`Dry Bulb Temperature [°C]`,
         horizontal = TRUE,
         ylab = "Temperature",
         border = "purple",
-        xlab = "Temperature in celsius")
+        xlab = "Temperature")
 ```
 
 ```{r}
 ggplot(data=weatherES) + aes(x=`Dry Bulb Temperature [°C]`, y=total) + geom_point() +
-geom_smooth(method="lm", se=FALSE)
-```
-
-```{r}
-ggplot(data=weatherES) + aes(x=`Relative Humidity [%]`, y=total) + geom_point() +
 geom_smooth(method="lm", se=FALSE)
 ```

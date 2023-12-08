@@ -1,6 +1,3 @@
-wd<-"/Users/harsh/Downloads"
-setwd(wd)
-getwd()
 library(tidyverse)
 #weather_data <- read_csv("weatherES (1).xlsx")
 #view(weather_data)
@@ -49,11 +46,6 @@ ui <- dashboardPage(
       box(
         verbatimTextOutput('max_pred_info')  # Output for maximum total predicted information
       )
-    ),
-    fluidRow(
-      box(
-        DTOutput('weather_table', width = '100%')  # Output for weather data table
-      )
     )
   )
 )
@@ -62,27 +54,23 @@ ui <- dashboardPage(
 # Define the server logic
 server <- function(input, output) {
   # Render weather data table based on selected County ID
-  output$weather_table <- renderDT({
-    filtered_data <- data[data$in.county == input$filter_county, ]  # Filter by selected County ID
-    datatable(filtered_data)
-  })
   
   # Calculate and display max total predicted information automatically
   output$max_pred_info <- renderPrint({
     filtered_max_data <- data[data$in.county == input$filter_county, ]
     max_pred_value <- max(filtered_max_data$totalPredicted)
     max_time <- filtered_max_data$time[which.max(filtered_max_data$totalPredicted)]
-    paste("Maximum Total Predicted for", input$filter_county, "is", max_pred_value,
+    paste("Maximum Total Predicted for", input$filter_county, "is", round(max_pred_value,2),
           "at time:", max_time)
   })
   
   # Create a ggplot for Dry Bulb Temperature vs Total Predicted
   output$drybulb_plot <- renderPlot({
     filtered_plot_data <- data[data$in.county == input$filter_county, ]  # Filter by selected County ID
-    ggplot(filtered_plot_data, aes(x = `Dry Bulb Temperature [°C]`, y = totalPredicted)) +
+    ggplot(filtered_plot_data, aes(x = time, y = totalPredicted)) +
       geom_line() +  # Use geom_line to create a line graph
-      labs(x = "Dry Bulb Temperature [°C]", y = "Total Predicted") +
-      ggtitle("Dry Bulb Temperature vs Total Predicted")
+      labs(x = "time", y = "Total Predicted") +
+      ggtitle("time vs Total Predicted")
   })
 }
 
@@ -98,11 +86,6 @@ ui <- dashboardPage(
     fluidRow(
       box(
         verbatimTextOutput('max_pred_info')  # Output for maximum total predicted information
-      )
-    ),
-    fluidRow(
-      box(
-        DTOutput('weather_table', width = '100%')  # Output for weather data table
       )
     ),
     fluidRow(
