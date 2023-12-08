@@ -1,21 +1,24 @@
 ```{r}
+#Importing tidyvers, arrow and ggplot2 packages
 library(tidyverse)
 library(arrow)
 library(ggplot2)
 ```
 
 ```{r}
+#Reading energy data
 energyData <- read_csv("energyData.csv")
 ```
 
 ```{r}
+#Extracting building id, time and total energy from energy data
 coln <- c("bldg_id","time","total")
-
 energyData <- energyData[,colnames(energyData) %in% coln]
 ```
 
 
 ```{r}
+#Reading building id, county and wall insulation from static house info 
 staticHouse <- read_parquet("static_house_info.parquet")
 
 coln <- c("bldg_id","in.county","in.insulation_wall")
@@ -23,33 +26,40 @@ staticHouse <- staticHouse[,colnames(staticHouse) %in% coln]
 ```
 
 ```{r}
+#Merging energy data and static house based on building id
 energyStatic <- merge(energyData,staticHouse,by="bldg_id", all.x = TRUE)
 ```
 
 
 ```{r}
+#Reading weather data
 weatherData <- read_csv("weatherData.csv")
 ```
 
 ```{r}
+#Merging energystatic and weather data based on county and time
 houseWeather <- merge(energyStatic,weatherData, by.x=c("in.county","time"), by.y = c("county_id","date_time"), all.x = TRUE)
 ```
 
 ```{r}
+#Getting the list of distinct counties
 unique(energyStatic$in.insulation_wall)
 ```
 
 
 ```{r}
+#Aggregating energy data based on insulation of wall
 insulationWall <- aggregate(total ~in.insulation_wall + day(time),data= houseWeather, FUN = sum,na.rm= TRUE)
 ```
 
 ```{r}
+#Aggregating energy data based on insulation of wall by taking average
 insulationWTot <- aggregate(total ~in.insulation_wall,data= houseWeather, FUN = mean,na.rm= TRUE)
 ```
 
 
 ```{r}
+#Plot energy data based on the wall insulation
 ggplot(insulationWTot, aes(total,in.insulation_wall)) + geom_col()
 ```
 
