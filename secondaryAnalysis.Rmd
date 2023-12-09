@@ -1,5 +1,5 @@
 ```{r}
-#Importing tidyvers, arrow and ggplot2 packages
+#Importing tidyverse, arrow and ggplot2 packages
 library(tidyverse)
 library(arrow)
 library(ggplot2)
